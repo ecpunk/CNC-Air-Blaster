@@ -34,38 +34,30 @@ void drawMainScreen() {
   if (!displayOK) return;
   display.clearDisplay();
 
-  // STATE line
-  display.setTextSize(2);
+  // STATE line (size 1 to fit)
+  display.setTextSize(1);
   display.setCursor(0, 0);
-  if (systemState == SYS_PAUSED)      display.print("STATE: PAUSED");
-  else if (systemState == SYS_ACTIVE) display.print("STATE: RUN");
-  else                                display.print("STATE: IDLE");
+  if (systemState == SYS_PAUSED)      display.print("PAUSED");
+  else if (systemState == SYS_ACTIVE) display.print("RUN");
+  else                                display.print("IDLE");
 
-  // ON label
-  display.setTextSize(2);
-  display.setCursor(0, 20);
-  display.print("ON");
-
-  // OFF label
-  display.setCursor(74, 20);
-  display.print("OFF");
-
-  // ON time
-  display.setCursor(0, 38);
+  // ON/OFF labels and values in one line
+  display.setCursor(0, 16);
+  display.print("ON:");
   display.print(pulseOnMs);
-  display.print(" ms");
+  display.print("ms");
 
-  // OFF time
-  display.setCursor(74, 38);
+  display.setCursor(0, 32);
+  display.print("OFF:");
   display.print(pulseOffMs);
-  display.print(" ms");
+  display.print("ms");
 
-  // Underline bars
+  // Underline bars for current adjustment mode
   if (adjustMode == ADJUST_ON_TIME) {
-    display.fillRect(0, 56, 60, 4, SSD1306_WHITE);
+    display.fillRect(0, 24, 64, 2, SSD1306_WHITE);
   }
   if (adjustMode == ADJUST_OFF_TIME) {
-    display.fillRect(74, 56, 60, 4, SSD1306_WHITE);
+    display.fillRect(0, 40, 64, 2, SSD1306_WHITE);
   }
 
   display.display();
