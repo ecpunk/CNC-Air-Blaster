@@ -60,18 +60,6 @@ Originally built for a Stepcraft M1000, but applicable to any CNC router, mill, 
 
 All components use 3.3V logic. See [HARDWARE_NOTES.md](HARDWARE_NOTES.md) for detailed wiring information, component specifications, and lessons learned.
 
-## Building and Uploading
-
-**Prerequisites**: PlatformIO (VS Code extension or CLI)
-
-```bash
-git clone https://github.com/ecpunk/CNC-Air-Blaster.git
-cd CNC-Air-Blaster
-pio run -t upload
-```
-
-See [platformio.ini](platformio.ini) for configuration. Serial port auto-detection usually works; if not, set `upload_port` in platformio.ini.
-
 ## How It Works
 
 1. **Solenoid valve** opens/closes a compressed air line on a timed schedule
