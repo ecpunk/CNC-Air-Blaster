@@ -83,10 +83,18 @@ void handleButton() {
         // Potential double click
         buttonClickCount++;
         if (buttonClickCount == 2) {
-          // Double click confirmed - open menu
-          Serial.println("MENU: Double click detected");
-          menuState = MENU_ACTIVE;
-          menuSelection = 0;  // Start with first item
+          // Double click confirmed - toggle menu
+          if (menuState == MENU_ACTIVE) {
+            // Exit menu
+            menuState = MENU_NONE;
+            menuSelection = 0;
+            Serial.println("Exiting menu via double-click");
+          } else {
+            // Enter menu
+            menuState = MENU_ACTIVE;
+            menuSelection = 0;
+            Serial.println("Entering menu via double-click");
+          }
           updateDisplay();
           buttonClickCount = 0;
           singleClickCheckTime = 0;
