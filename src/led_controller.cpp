@@ -7,7 +7,7 @@ Adafruit_NeoPixel statusLed(1, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 void initStatusLed() {
   statusLed.begin();
-  statusLed.setBrightness(100);
+  statusLed.setBrightness(50);
   statusLed.show();
 }
 
@@ -45,9 +45,8 @@ void updateStatusLed() {
     // Red = paused
     setLedColor(255, 0, 0);
   } else if (editWindow) {
-    // Blue = adjusting ON, Purple = adjusting OFF
-    if (adjustMode == ADJUST_ON_TIME) setLedColor(0, 0, 255);
-    else                             setLedColor(150, 0, 150);
+    // Blue = adjusting (ON or OFF time)
+    setLedColor(0, 0, 255);
   } else if (systemState == SYS_ACTIVE && safetyOK && spindleRunning) {
     // Green = normal running
     setLedColor(0, 200, 0);
