@@ -55,15 +55,86 @@ void drawBrightnessMenu() {
   display.print("Level: ");
   display.println(oledBrightness);
   
-  // Show a simple bar
+  // Show instructions
   display.setCursor(0, 32);
-  display.println("Turn encoder to");
+  display.println("Rotate to adjust");
   display.setCursor(0, 40);
-  display.println("adjust. Hold to");
-  display.setCursor(0, 48);
-  display.println("exit.");
+  display.println("Hold to exit");
   
   display.display();
+}
+
+void drawMenuItem2() {
+  if (!displayOK) return;
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  
+  display.setCursor(0, 0);
+  display.println("Menu Item 2");
+  display.setCursor(0, 16);
+  display.println("[Placeholder]");
+  display.setCursor(0, 32);
+  display.println("Function TBD");
+  display.setCursor(0, 48);
+  display.println("Up/Dn: Navigate");
+  
+  display.display();
+}
+
+void drawMenuItem3() {
+  if (!displayOK) return;
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  
+  display.setCursor(0, 0);
+  display.println("Menu Item 3");
+  display.setCursor(0, 16);
+  display.println("[Placeholder]");
+  display.setCursor(0, 32);
+  display.println("Function TBD");
+  display.setCursor(0, 48);
+  display.println("Up/Dn: Navigate");
+  
+  display.display();
+}
+
+void drawMenuItem4() {
+  if (!displayOK) return;
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  
+  display.setCursor(0, 0);
+  display.println("Menu Item 4");
+  display.setCursor(0, 16);
+  display.println("[Placeholder]");
+  display.setCursor(0, 32);
+  display.println("Function TBD");
+  display.setCursor(0, 48);
+  display.println("Up/Dn: Navigate");
+  
+  display.display();
+}
+
+void drawMenu() {
+  switch (menuSelection) {
+    case MENU_BRIGHTNESS:
+      drawBrightnessMenu();
+      break;
+    case MENU_ITEM_2:
+      drawMenuItem2();
+      break;
+    case MENU_ITEM_3:
+      drawMenuItem3();
+      break;
+    case MENU_ITEM_4:
+      drawMenuItem4();
+      break;
+    default:
+      drawBrightnessMenu();
+  }
 }
 
 void drawMainScreen() {
@@ -115,8 +186,8 @@ void updateDisplay() {
   }
   
   // If in menu, show menu
-  if (menuState == MENU_BRIGHTNESS) {
-    drawBrightnessMenu();
+  if (menuState == MENU_ACTIVE) {
+    drawMenu();
     lastDisplayHash = 0;  // Reset hash to force redraw when exiting menu
     return;
   }

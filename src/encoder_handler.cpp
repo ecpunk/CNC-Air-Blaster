@@ -22,16 +22,28 @@ static void handleEncoderStep(int direction) {
   // direction: +1 = CW, -1 = CCW
   unsigned long now = millis();
 
-  // If in menu, adjust menu values
-  if (menuState == MENU_BRIGHTNESS) {
-    // Adjust LED brightness
-    long next = (long)oledBrightness + (direction > 0 ? 10 : -10);
-    oledBrightness = constrain(next, 0, 255);
-    setDisplayBrightness();
-    updateDisplay();
-    
-    Serial.print("LED Brightness: ");
-    Serial.println(oledBrightness);
+  // If in menu, navigate or adjust
+  if (menuState == MENU_ACTIVE) {
+    if (menuSelection == MENU_BRIGHTNESS) {
+      // Adjust LED brightness
+      long next = (long)oledBrightness + (direction > 0 ? 10 : -10);
+      oledBrightness = constrain(next, 0, 255);
+      setDisplayBrightness();
+      updateDisplay();
+      
+      Serial.print("LED Brightness: ");
+      Serial.println(oledBrightness);
+    } else {
+      // Navigate between menu items
+      if (direction > 0) {
+        menuSelection = (menuSelection + 1) % 4;
+      } else {
+        menuSelection = (menuSelection == 0) ? 3 : (menuSelection - 1);
+      }
+      Serial.print("Menu Selection: ");
+      Serial.println(menuSelection);
+      updateDisplay();
+    }
     return;
   }
 

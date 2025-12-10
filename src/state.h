@@ -8,7 +8,8 @@
 // ============================================================================
 enum AdjustMode  { ADJUST_ON_TIME, ADJUST_OFF_TIME };
 enum SystemState { SYS_IDLE, SYS_ACTIVE, SYS_PAUSED };
-enum MenuState   { MENU_NONE, MENU_BRIGHTNESS };
+enum MenuState   { MENU_NONE, MENU_ACTIVE };
+enum MenuItem    { MENU_BRIGHTNESS = 0, MENU_ITEM_2 = 1, MENU_ITEM_3 = 2, MENU_ITEM_4 = 3 };
 
 // ============================================================================
 // GLOBAL STATE VARIABLES
@@ -28,8 +29,8 @@ extern bool inEditMode;
 extern unsigned long lastEditTime;
 
 // Menu control
-extern uint8_t menuSelection;      // 0 = brightness (add more items as needed)
-extern uint8_t maxMenuItems;       // total menu items
+extern uint8_t menuSelection;       // 0 = brightness, 1 = item2, 2 = item3, 3 = item4
+const uint8_t maxMenuItems = 4;     // total number of menu items
 
 // Button state
 extern bool buttonPressed;

@@ -47,8 +47,9 @@ void handleButton() {
   if (raw && lastRaw && !pauseTriggered && (now - buttonPressTime >= LONG_PRESS_MS)) {
     // Long press detected while holding
     // If in menu, exit menu
-    if (menuState != MENU_NONE) {
+    if (menuState == MENU_ACTIVE) {
       menuState = MENU_NONE;
+      menuSelection = 0;  // Reset to first item
       Serial.println("Exiting menu");
       updateDisplay();
     } else {
@@ -84,8 +85,8 @@ void handleButton() {
         if (buttonClickCount == 2) {
           // Double click confirmed - open menu
           Serial.println("MENU: Double click detected");
-          menuState = MENU_BRIGHTNESS;  // Start with brightness menu
-          menuSelection = 0;
+          menuState = MENU_ACTIVE;
+          menuSelection = 0;  // Start with first item
           updateDisplay();
           buttonClickCount = 0;
           singleClickCheckTime = 0;

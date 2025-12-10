@@ -19,7 +19,6 @@ unsigned long lastEditTime = 0;
 
 // Menu control
 uint8_t menuSelection = 0;
-uint8_t maxMenuItems = 1;  // Currently: 0 = brightness
 
 // Button state
 bool buttonPressed         = false;
