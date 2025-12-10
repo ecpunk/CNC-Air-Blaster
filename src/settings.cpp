@@ -10,6 +10,8 @@ void loadSettings() {
   pulseOnMs      = preferences.getUInt("on",  500);
   pulseOffMs     = preferences.getUInt("off", 500);
   oledBrightness = preferences.getUChar("brite", BRIGHTNESS_DEFAULT);
+    // Load persisted LED brightness (0-255). Default to current ledBrightness if missing.
+    ledBrightness  = preferences.getUChar("ledb", ledBrightness);
   preferences.end();
 
   pulseOnMs  = constrain(pulseOnMs,  TIMING_MIN_MS, TIMING_MAX_MS);
@@ -25,6 +27,7 @@ void saveSettings() {
   preferences.putUInt("on",  pulseOnMs);
   preferences.putUInt("off", pulseOffMs);
   preferences.putUChar("brite", oledBrightness);
+    preferences.putUChar("ledb", ledBrightness);
   preferences.end();
 }
 
@@ -32,5 +35,6 @@ void factoryReset() {
   pulseOnMs      = 500;
   pulseOffMs     = 500;
   oledBrightness = BRIGHTNESS_DEFAULT;
+    ledBrightness  = 50;
   saveSettings();
 }

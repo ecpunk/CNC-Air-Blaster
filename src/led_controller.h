@@ -5,5 +5,6 @@ void initStatusLed();
 void setLedColor(uint8_t r, uint8_t g, uint8_t b);
 void rainbowBoot();
 void updateStatusLed();
+void setStatusLedBrightness(uint8_t b);
 
 #endif

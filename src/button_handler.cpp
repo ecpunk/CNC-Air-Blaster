@@ -50,6 +50,7 @@ void handleButton() {
     if (menuState == MENU_ACTIVE) {
       menuState = MENU_NONE;
       menuSelection = 0;  // Reset to first item
+      inEditMode = false;
       Serial.println("Exiting menu");
       updateDisplay();
     } else {
@@ -88,6 +89,7 @@ void handleButton() {
             // Exit menu
             menuState = MENU_NONE;
             menuSelection = 0;
+            inEditMode = false;
             Serial.println("Exiting menu via double-click");
           } else {
             // Enter menu
@@ -119,6 +121,10 @@ void handleButton() {
         // Not in menu, toggle adjust mode
         adjustMode = (adjustMode == ADJUST_ON_TIME ? ADJUST_OFF_TIME : ADJUST_ON_TIME);
         inEditMode = true;
+        lastEditTime = now;
+      } else if (menuState == MENU_ACTIVE) {
+        // In menu: toggle edit mode for the selected item
+        inEditMode = !inEditMode;
         lastEditTime = now;
       }
       updateDisplay();

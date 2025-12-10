@@ -7,7 +7,15 @@ Adafruit_NeoPixel statusLed(1, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 void initStatusLed() {
   statusLed.begin();
-  statusLed.setBrightness(50);
+  // Initialize NeoPixel brightness from persisted state variable
+  statusLed.setBrightness(ledBrightness);
+  statusLed.show();
+}
+
+// Set status LED brightness (0-255) and apply immediately
+void setStatusLedBrightness(uint8_t b) {
+  ledBrightness = b;
+  statusLed.setBrightness(ledBrightness);
   statusLed.show();
 }
 

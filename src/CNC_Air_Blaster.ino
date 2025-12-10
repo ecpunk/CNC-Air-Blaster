@@ -72,7 +72,8 @@ void loop() {
   handleButton();
 
   // --- Update display state ---
-  if (inEditMode && (now - lastEditTime > EDIT_TIMEOUT_MS)) {
+  // Auto-exit edit mode timeout only applies when NOT in menu
+  if (inEditMode && menuState == MENU_NONE && (now - lastEditTime > EDIT_TIMEOUT_MS)) {
     inEditMode = false;
     updateDisplay();
   }

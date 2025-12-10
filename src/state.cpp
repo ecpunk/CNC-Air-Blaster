@@ -45,3 +45,5 @@ bool spindleRunning    = true;
 // Display and LED
 uint8_t oledBrightness = 0x7F;
 bool displayOK = false;
+// Status LED brightness (0-255)
+uint8_t ledBrightness = 50;

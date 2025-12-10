@@ -22,23 +22,36 @@ static void handleEncoderStep(int direction) {
   // direction: +1 = CW, -1 = CCW
   unsigned long now = millis();
 
-  // If in menu, navigate or adjust
+  // If in menu, navigate menu items
   if (menuState == MENU_ACTIVE) {
-    if (menuSelection == MENU_BRIGHTNESS) {
-      // Adjust LED brightness
-      long next = (long)oledBrightness + (direction > 0 ? 10 : -10);
-      oledBrightness = constrain(next, 0, 255);
-      setDisplayBrightness();
-      updateDisplay();
-      
-      Serial.print("LED Brightness: ");
-      Serial.println(oledBrightness);
+    // If we're editing a menu item, apply the encoder to that item
+    if (inEditMode) {
+      // Adjust the selected menu item
+      if (menuSelection == MENU_BRIGHTNESS) {
+        // LED brightness: 10-100% in 10% steps, mapped to 26-255
+        // Current brightness as percentage (rounded to nearest 10%)
+        int percent = (int)((ledBrightness * 100.0 / 255.0) + 0.5);
+        percent = ((percent + 5) / 10) * 10; // Round to nearest 10%
+        
+        // Apply encoder delta
+        int delta = (direction > 0) ? 10 : -10;
+        percent += delta;
+        if (percent < 10) percent = 10;
+        if (percent > 100) percent = 100;
+        
+        // Map percentage to NeoPixel brightness (0-255)
+        uint8_t newB = (uint8_t)(percent * 255 / 100);
+        setStatusLedBrightness(newB);
+        saveSettings();
+        updateDisplay();
+      }
+      // Info/About is not editable
     } else {
-      // Navigate between menu items
+      // Navigate between menu items (only 2 now)
       if (direction > 0) {
-        menuSelection = (menuSelection + 1) % 4;
+        menuSelection = (menuSelection + 1) % 2;
       } else {
-        menuSelection = (menuSelection == 0) ? 3 : (menuSelection - 1);
+        menuSelection = (menuSelection == 0) ? 1 : (menuSelection - 1);
       }
       Serial.print("Menu Selection: ");
       Serial.println(menuSelection);
@@ -47,8 +60,11 @@ static void handleEncoderStep(int direction) {
     return;
   }
 
-  // Otherwise adjust timing values
-  inEditMode   = true;
+  // Only allow encoder to adjust values if inEditMode is true
+  if (!inEditMode) {
+    // Ignore encoder turns unless in edit mode (single click enters edit mode)
+    return;
+  }
   lastEditTime = now;
 
   if (adjustMode == ADJUST_ON_TIME) {

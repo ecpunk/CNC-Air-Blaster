@@ -49,18 +49,67 @@ void drawBrightnessMenu() {
   
   display.setCursor(0, 0);
   display.println("LED Brightness");
-  
-  // Display current brightness level (0-255)
   display.setCursor(0, 16);
   display.print("Level: ");
   display.println(oledBrightness);
-  
-  // Show instructions
   display.setCursor(0, 32);
   display.println("Rotate to adjust");
-  display.setCursor(0, 40);
-  display.println("Hold to exit");
+  display.setCursor(0, 48);
+  display.println("(0-255)");
   
+  display.display();
+}
+
+void drawMenuList() {
+  if (!displayOK) return;
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  
+  // Title
+  display.setCursor(0, 0);
+  display.println("MENU");
+
+  // Menu items with size 2 text
+  const char* items[] = {"LED", "About"};
+  for (int i = 0; i < 2; i++) {
+    int y = 16 + (i * 24);
+    display.setTextSize(2);
+    if (i == menuSelection) {
+      // Highlight selected item with inversion
+      display.setTextColor(SSD1306_BLACK, SSD1306_WHITE);
+      display.setCursor(0, y);
+      display.print("> ");
+      display.print(items[i]);
+      if (i == MENU_BRIGHTNESS) {
+        // Show brightness as percent (0-255 mapped to 0-100%)
+        int percent = (int)((ledBrightness * 100.0 / 255.0) + 0.5);
+        display.print(":");
+        display.print(percent);
+        display.print("%");
+      }
+      display.setTextColor(SSD1306_WHITE);
+    } else {
+      display.setTextColor(SSD1306_WHITE);
+      display.setCursor(0, y);
+      display.print("  ");
+      display.print(items[i]);
+    }
+  }
+  display.display();
+}
+
+void drawInfoAbout() {
+  if (!displayOK) return;
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("CNC Air Blaster");
+  display.println("Firmware v1.0");
+  display.println("by ecpunk");
+  display.println("");
+  display.println("github.com/ecpunk");
   display.display();
 }
 
@@ -76,8 +125,6 @@ void drawMenuItem2() {
   display.println("[Placeholder]");
   display.setCursor(0, 32);
   display.println("Function TBD");
-  display.setCursor(0, 48);
-  display.println("Up/Dn: Navigate");
   
   display.display();
 }
@@ -94,8 +141,6 @@ void drawMenuItem3() {
   display.println("[Placeholder]");
   display.setCursor(0, 32);
   display.println("Function TBD");
-  display.setCursor(0, 48);
-  display.println("Up/Dn: Navigate");
   
   display.display();
 }
@@ -119,21 +164,11 @@ void drawMenuItem4() {
 }
 
 void drawMenu() {
-  switch (menuSelection) {
-    case MENU_BRIGHTNESS:
-      drawBrightnessMenu();
-      break;
-    case MENU_ITEM_2:
-      drawMenuItem2();
-      break;
-    case MENU_ITEM_3:
-      drawMenuItem3();
-      break;
-    case MENU_ITEM_4:
-      drawMenuItem4();
-      break;
-    default:
-      drawBrightnessMenu();
+  // If Info/About selected and in edit mode, show info screen
+  if (menuSelection == MENU_INFO && inEditMode) {
+    drawInfoAbout();
+  } else {
+    drawMenuList();
   }
 }
 
