@@ -49,10 +49,13 @@ void handleButton() {
     // If in menu, exit menu
     if (menuState != MENU_NONE) {
       menuState = MENU_NONE;
+      Serial.println("Exiting menu");
       updateDisplay();
     } else {
       // Otherwise, toggle pause
       systemState = (systemState == SYS_PAUSED ? SYS_ACTIVE : SYS_PAUSED);
+      Serial.print("Toggle pause. New state: ");
+      Serial.println(systemState == SYS_PAUSED ? "PAUSED" : "ACTIVE");
       updateDisplay();
     }
     pauseTriggered = true;

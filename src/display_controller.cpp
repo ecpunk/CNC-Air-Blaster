@@ -110,12 +110,14 @@ void updateDisplay() {
   // If paused, show pause screen
   if (systemState == SYS_PAUSED) {
     drawPauseScreen();
+    lastDisplayHash = 0;  // Reset hash to force redraw when unpaused
     return;
   }
   
   // If in menu, show menu
   if (menuState == MENU_BRIGHTNESS) {
     drawBrightnessMenu();
+    lastDisplayHash = 0;  // Reset hash to force redraw when exiting menu
     return;
   }
   

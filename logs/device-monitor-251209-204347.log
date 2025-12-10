@@ -1,0 +1,8 @@
+20:43:47.784 > SW uses external pulldown
+20:43:49.205 > =================================
+20:43:49.205 > CNC Air Blast Controller - MODULAR
+20:43:49.205 > Short press = swap ON/OFF adjust
+20:43:49.218 > Long  press = pause / resume
+20:43:49.220 > =================================
+20:43:51.100 > Toggle pause. New state: PAUSED
+20:43:54.388 > Toggle pause. New state: ACTIVE
