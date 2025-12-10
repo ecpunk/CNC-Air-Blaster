@@ -3,6 +3,7 @@
 #include "state.h"
 #include "settings.h"
 #include "display_controller.h"
+#include "led_controller.h"
 
 void initEncoder() {
   pinMode(ENCODER_CLK, INPUT_PULLUP);
@@ -16,12 +17,25 @@ void initEncoder() {
 }
 
 // --- Quadrature decoder: 1 logical step per full detent ---
-// Handles direction and updates timing values
+// Handles direction and updates timing values or menu items
 static void handleEncoderStep(int direction) {
   // direction: +1 = CW, -1 = CCW
   unsigned long now = millis();
 
-  // Allow timing edits even when paused
+  // If in menu, adjust menu values
+  if (menuState == MENU_BRIGHTNESS) {
+    // Adjust LED brightness
+    long next = (long)oledBrightness + (direction > 0 ? 10 : -10);
+    oledBrightness = constrain(next, 0, 255);
+    setDisplayBrightness();
+    updateDisplay();
+    
+    Serial.print("LED Brightness: ");
+    Serial.println(oledBrightness);
+    return;
+  }
+
+  // Otherwise adjust timing values
   inEditMode   = true;
   lastEditTime = now;
 

@@ -4,6 +4,7 @@
 #include <Adafruit_SSD1306.h>
 #include "hardware.h"
 #include "state.h"
+#include "led_controller.h"
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -30,16 +31,51 @@ void setDisplayBrightness() {
   display.ssd1306_command(oledBrightness);
 }
 
+void drawPauseScreen() {
+  if (!displayOK) return;
+  display.clearDisplay();
+  display.setTextSize(3);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(5, 20);
+  display.println("PAUSE");
+  display.display();
+}
+
+void drawBrightnessMenu() {
+  if (!displayOK) return;
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  
+  display.setCursor(0, 0);
+  display.println("LED Brightness");
+  
+  // Display current brightness level (0-255)
+  display.setCursor(0, 16);
+  display.print("Level: ");
+  display.println(oledBrightness);
+  
+  // Show a simple bar
+  display.setCursor(0, 32);
+  display.println("Turn encoder to");
+  display.setCursor(0, 40);
+  display.println("adjust. Hold to");
+  display.setCursor(0, 48);
+  display.println("exit.");
+  
+  display.display();
+}
+
 void drawMainScreen() {
   if (!displayOK) return;
   display.clearDisplay();
 
   // STATE line (size 1 to fit)
   display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
-  if (systemState == SYS_PAUSED)      display.print("PAUSED");
-  else if (systemState == SYS_ACTIVE) display.print("RUN");
-  else                                display.print("IDLE");
+  if (systemState == SYS_ACTIVE) display.print("RUN");
+  else                           display.print("IDLE");
 
   // ON value (left side) - highlight if adjusting AND in edit mode
   display.setTextSize(2);
@@ -71,6 +107,19 @@ void drawMainScreen() {
 
 unsigned long lastDisplayHash = 0;
 void updateDisplay() {
+  // If paused, show pause screen
+  if (systemState == SYS_PAUSED) {
+    drawPauseScreen();
+    return;
+  }
+  
+  // If in menu, show menu
+  if (menuState == MENU_BRIGHTNESS) {
+    drawBrightnessMenu();
+    return;
+  }
+  
+  // Otherwise show main screen
   unsigned long h = pulseOnMs ^ (pulseOffMs << 8) ^ (adjustMode << 16) ^ (systemState << 20) ^ (inEditMode << 24);
   if (h == lastDisplayHash) return;
   lastDisplayHash = h;

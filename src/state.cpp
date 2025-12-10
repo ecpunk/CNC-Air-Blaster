@@ -11,10 +11,15 @@ unsigned long pulseOffMs = 500;
 // State machine
 AdjustMode  adjustMode  = ADJUST_ON_TIME;
 SystemState systemState = SYS_ACTIVE;
+MenuState   menuState   = MENU_NONE;
 
 // Edit mode tracking
 bool inEditMode          = false;
 unsigned long lastEditTime = 0;
+
+// Menu control
+uint8_t menuSelection = 0;
+uint8_t maxMenuItems = 1;  // Currently: 0 = brightness
 
 // Button state
 bool buttonPressed         = false;

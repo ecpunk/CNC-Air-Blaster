@@ -21,12 +21,13 @@ void initButton() {
 //
 // Actions:
 // 1. Single click: toggle adjust mode (ON <-> OFF)
-// 2. Double click: open menu (reserved for future)
-// 3. Hold >= 1s: pause/resume (triggers while holding, not on release)
+// 2. Double click: open menu
+// 3. Hold >= 1s: pause/resume or exit menu (triggers while holding, not on release)
 //
 void handleButton() {
   static bool lastRaw = false;
   static bool pauseTriggered = false;  // track if pause already triggered during this hold
+  static unsigned long singleClickCheckTime = 0;
   unsigned long now = millis();
   bool raw = digitalRead(ENCODER_SW) == HIGH;
 
@@ -45,9 +46,16 @@ void handleButton() {
   // Button held: check for pause trigger (>= 1 second)
   if (raw && lastRaw && !pauseTriggered && (now - buttonPressTime >= LONG_PRESS_MS)) {
     // Long press detected while holding
-    systemState = (systemState == SYS_PAUSED ? SYS_ACTIVE : SYS_PAUSED);
+    // If in menu, exit menu
+    if (menuState != MENU_NONE) {
+      menuState = MENU_NONE;
+      updateDisplay();
+    } else {
+      // Otherwise, toggle pause
+      systemState = (systemState == SYS_PAUSED ? SYS_ACTIVE : SYS_PAUSED);
+      updateDisplay();
+    }
     pauseTriggered = true;
-    updateDisplay();
     return;
   }
 
@@ -71,15 +79,18 @@ void handleButton() {
         // Potential double click
         buttonClickCount++;
         if (buttonClickCount == 2) {
-          // Double click confirmed
+          // Double click confirmed - open menu
           Serial.println("MENU: Double click detected");
-          // TODO: open menu
+          menuState = MENU_BRIGHTNESS;  // Start with brightness menu
+          menuSelection = 0;
+          updateDisplay();
           buttonClickCount = 0;
+          singleClickCheckTime = 0;
         }
       } else {
         // Single click (no pending double click)
         buttonClickCount = 1;
-        // Schedule a check in DOUBLE_CLICK_MS to confirm single click
+        singleClickCheckTime = now;
       }
       lastButtonReleaseTime = now;
     }
@@ -89,21 +100,19 @@ void handleButton() {
   lastRaw = raw;
   
   // Timeout for single click confirmation
-  static unsigned long singleClickCheckTime = 0;
   if (buttonClickCount == 1 && singleClickCheckTime > 0) {
-    if (now - lastButtonReleaseTime >= DOUBLE_CLICK_MS && now - singleClickCheckTime >= 0) {
+    if (now - lastButtonReleaseTime >= DOUBLE_CLICK_MS) {
       // Single click confirmed (no second click arrived)
-      adjustMode = (adjustMode == ADJUST_ON_TIME ? ADJUST_OFF_TIME : ADJUST_ON_TIME);
-      inEditMode = true;
-      lastEditTime = now;
+      if (menuState == MENU_NONE) {
+        // Not in menu, toggle adjust mode
+        adjustMode = (adjustMode == ADJUST_ON_TIME ? ADJUST_OFF_TIME : ADJUST_ON_TIME);
+        inEditMode = true;
+        lastEditTime = now;
+      }
       updateDisplay();
       buttonClickCount = 0;
       singleClickCheckTime = 0;
       return;
     }
-  }
-  
-  if (buttonClickCount == 1 && singleClickCheckTime == 0) {
-    singleClickCheckTime = now;
   }
 }

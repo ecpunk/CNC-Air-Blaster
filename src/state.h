@@ -8,6 +8,7 @@
 // ============================================================================
 enum AdjustMode  { ADJUST_ON_TIME, ADJUST_OFF_TIME };
 enum SystemState { SYS_IDLE, SYS_ACTIVE, SYS_PAUSED };
+enum MenuState   { MENU_NONE, MENU_BRIGHTNESS };
 
 // ============================================================================
 // GLOBAL STATE VARIABLES
@@ -20,10 +21,15 @@ extern unsigned long pulseOffMs;
 // State machine
 extern AdjustMode  adjustMode;
 extern SystemState systemState;
+extern MenuState   menuState;
 
 // Edit mode tracking
 extern bool inEditMode;
 extern unsigned long lastEditTime;
+
+// Menu control
+extern uint8_t menuSelection;      // 0 = brightness (add more items as needed)
+extern uint8_t maxMenuItems;       // total menu items
 
 // Button state
 extern bool buttonPressed;
