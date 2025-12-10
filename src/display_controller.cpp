@@ -41,10 +41,10 @@ void drawMainScreen() {
   else if (systemState == SYS_ACTIVE) display.print("RUN");
   else                                display.print("IDLE");
 
-  // ON value (left side) - highlight if adjusting - size 2
+  // ON value (left side) - highlight if adjusting AND in edit mode
   display.setTextSize(2);
   display.setCursor(0, 16);
-  if (adjustMode == ADJUST_ON_TIME) {
+  if (adjustMode == ADJUST_ON_TIME && inEditMode) {
     display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Inverted
     display.print("ON:");
     display.print(pulseOnMs);
@@ -54,9 +54,9 @@ void drawMainScreen() {
     display.print(pulseOnMs);
   }
 
-  // OFF value (below ON) - highlight if adjusting - size 2
+  // OFF value (below ON) - highlight if adjusting AND in edit mode
   display.setCursor(0, 40);
-  if (adjustMode == ADJUST_OFF_TIME) {
+  if (adjustMode == ADJUST_OFF_TIME && inEditMode) {
     display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Inverted
     display.print("OFF:");
     display.print(pulseOffMs);
