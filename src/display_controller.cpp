@@ -41,23 +41,32 @@ void drawMainScreen() {
   else if (systemState == SYS_ACTIVE) display.print("RUN");
   else                                display.print("IDLE");
 
-  // ON/OFF labels and values in one line
+  // ON value (left side) - highlight if adjusting
   display.setCursor(0, 16);
-  display.print("ON:");
-  display.print(pulseOnMs);
-  display.print("ms");
-
-  display.setCursor(0, 32);
-  display.print("OFF:");
-  display.print(pulseOffMs);
-  display.print("ms");
-
-  // Underline bars for current adjustment mode
   if (adjustMode == ADJUST_ON_TIME) {
-    display.fillRect(0, 24, 64, 2, SSD1306_WHITE);
+    display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Inverted
+    display.print("ON: ");
+    display.print(pulseOnMs);
+    display.print("ms");
+    display.setTextColor(SSD1306_WHITE); // Reset to normal
+  } else {
+    display.print("ON: ");
+    display.print(pulseOnMs);
+    display.print("ms");
   }
+
+  // OFF value (below ON) - highlight if adjusting
+  display.setCursor(0, 32);
   if (adjustMode == ADJUST_OFF_TIME) {
-    display.fillRect(0, 40, 64, 2, SSD1306_WHITE);
+    display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Inverted
+    display.print("OFF:");
+    display.print(pulseOffMs);
+    display.print("ms");
+    display.setTextColor(SSD1306_WHITE); // Reset to normal
+  } else {
+    display.print("OFF:");
+    display.print(pulseOffMs);
+    display.print("ms");
   }
 
   display.display();
