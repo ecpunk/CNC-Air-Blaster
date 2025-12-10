@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <Preferences.h>
 #include "hardware.h"
 #include "state.h"

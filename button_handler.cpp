@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "hardware.h"
 #include "state.h"
 #include "display_controller.h"
