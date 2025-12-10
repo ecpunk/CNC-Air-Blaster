@@ -20,6 +20,9 @@ unsigned long lastEditTime = 0;
 bool buttonPressed         = false;
 unsigned long buttonPressTime = 0;
 unsigned long lastButtonEvent  = 0;
+unsigned long lastButtonReleaseTime = 0;
+uint8_t buttonClickCount = 0;
+bool pauseActive = false;
 
 // Encoder state
 uint8_t  encLastState   = 0;

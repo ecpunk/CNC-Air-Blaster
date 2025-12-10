@@ -29,6 +29,9 @@ extern unsigned long lastEditTime;
 extern bool buttonPressed;
 extern unsigned long buttonPressTime;
 extern unsigned long lastButtonEvent;
+extern unsigned long lastButtonReleaseTime;
+extern uint8_t buttonClickCount;
+extern bool pauseActive;
 
 // Encoder state
 extern uint8_t  encLastState;

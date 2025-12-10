@@ -31,7 +31,8 @@ const unsigned long TIMING_MAX_MS   = 1500;
 const unsigned long TIMING_STEP_MS  = 250;
 
 const unsigned long BUTTON_DEBOUNCE_MS = 60;
-const unsigned long LONG_PRESS_MS      = 1000;   // pause / resume threshold
+const unsigned long LONG_PRESS_MS      = 1000;   // hold duration to trigger pause
+const unsigned long DOUBLE_CLICK_MS    = 400;    // max time between clicks for double-click
 const unsigned long EDIT_TIMEOUT_MS    = 5000;   // underline + LED edit color timeout
 const unsigned long ENCODER_EVENT_MIN_MS = 1;   // ignore ultra-fast jitter
 
